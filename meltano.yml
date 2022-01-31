@@ -1,0 +1,33 @@
+version: 1
+send_anonymous_usage_stats: true
+project_id: 92b18cb2-b8b4-458c-9cc8-b38ec21a9fe0
+plugins:
+  extractors:
+  - name: tap-nhl
+    namespace: tap_nhl
+    pip_url: -e .
+    capabilities:
+    - state
+    - catalog
+    - discover
+    settings:
+    - name: username
+    - name: password
+      kind: password
+    - name: start_date
+      value: '2021-01-15'
+    config:
+      start_date: '2021-01-15'
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl
+  - name: target-bigquery
+    variant: adswerve
+    pip_url: git+https://github.com/adswerve/target-bigquery.git@0.11.3
+    config:
+      project_id: nhl-breakouts
+      dataset_id: raw
+      location: us-west1
+      add_metadata_columns: true
+      credentials_path: ./.secrets/client_secrets.json
